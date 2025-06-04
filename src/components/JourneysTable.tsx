@@ -18,7 +18,51 @@ import {
 import type {Journey} from "@/types/response.ts";
 import DynamicBadgeDisplay from "@/components/DinamicBadgeDisplay.tsx";
 
-export default function JourneysTable({journeys}: { journeys: Journey[] }) {
+interface JourneysTableProps {
+    journeys: Journey[];
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+}
+
+export default function JourneysTable({journeys, currentPage, totalPages, onPageChange}: JourneysTableProps) {
+
+    const handlePrevious = () => {
+        if (currentPage > 1) {
+            onPageChange(currentPage - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentPage < totalPages) {
+            onPageChange(currentPage + 1);
+        }
+    };
+
+    const getPageNumbers = () => {
+        const pages = [];
+        const maxPagesToShow = 5;
+        const halfPagesToShow = Math.floor(maxPagesToShow / 2);
+
+        let startPage = Math.max(1, currentPage - halfPagesToShow);
+        let endPage = Math.min(totalPages, currentPage + halfPagesToShow);
+
+        if (currentPage - halfPagesToShow <= 0) {
+            endPage = Math.min(totalPages, maxPagesToShow);
+        }
+
+        if (currentPage + halfPagesToShow >= totalPages) {
+            startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
+
+    const pageNumbers = getPageNumbers();
+
     return (
         <div className="container mx-auto py-8">
             <h1 className="text-3xl font-bold pb-2">Jornadas de Conversão</h1>
@@ -51,24 +95,64 @@ export default function JourneysTable({journeys}: { journeys: Journey[] }) {
             <Pagination className="mt-4">
                 <PaginationContent>
                     <PaginationItem>
-                        <PaginationPrevious href="#"/>
+                        <PaginationPrevious
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handlePrevious();
+                            }}
+                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        />
                     </PaginationItem>
+                    {pageNumbers[0] > 1 && (
+                        <>
+                            <PaginationItem>
+                                <PaginationLink href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    onPageChange(1);
+                                }}>
+                                    1
+                                </PaginationLink>
+                            </PaginationItem>
+                            {pageNumbers[0] > 2 && <PaginationEllipsis />}
+                        </>
+                    )}
+                    {pageNumbers.map((page) => (
+                        <PaginationItem key={page}>
+                            <PaginationLink
+                                href="#"
+                                isActive={page === currentPage}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    onPageChange(page);
+                                }}
+                            >
+                                {page}
+                            </PaginationLink>
+                        </PaginationItem>
+                    ))}
+                    {pageNumbers[pageNumbers.length - 1] < totalPages && (
+                        <>
+                            {pageNumbers[pageNumbers.length - 1] < totalPages -1 && <PaginationEllipsis />}
+                            <PaginationItem>
+                                <PaginationLink href="#" onClick={(e) => {
+                                    e.preventDefault();
+                                    onPageChange(totalPages);
+                                }}>
+                                    {totalPages}
+                                </PaginationLink>
+                            </PaginationItem>
+                        </>
+                    )}
                     <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                            2
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#"/>
+                        <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNext();
+                            }}
+                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        />
                     </PaginationItem>
                 </PaginationContent>
             </Pagination>
