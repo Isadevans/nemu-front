@@ -16,29 +16,32 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import type {Journey} from "@/types/response.ts";
-import {Badge} from "@/components/ui/badge.tsx";
-
+import DynamicBadgeDisplay from "@/components/DinamicBadgeDisplay.tsx";
 
 export default function JourneysTable({journeys}: { journeys: Journey[] }) {
     return (
         <div className="container mx-auto py-8">
             <h1 className="text-3xl font-bold pb-2">Jornadas de Conversão</h1>
-            <p className="text-gray-500 pb-6">Multitouch Attribution - Visualize as jornadas completas dos usuários até a conversão
-
+            <p className="text-gray-500 pb-6">Multitouch Attribution - Visualize as jornadas completas dos usuários até
+                a conversão
             </p>
-            <div className="w-full border rounded-md overflow-hidden ">
-                <Table>
+            <div className="w-full border rounded-md overflow-hidden">
+                <Table className="w-full table-fixed">
                     <TableHeader>
                         <TableRow>
-                            <TableHead >JORNADA</TableHead>
-                            <TableHead>TOUCHPOINTS</TableHead>
+                            <TableHead style={{ width: '90%' }}>JORNADA</TableHead>
+                            <TableHead style={{ width: '10%', textAlign: 'right' }}>TOUCHPOINTS</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody className="mx-auto max-w-2xl">
+                    <TableBody>
                         {journeys.map((product) => (
                             <TableRow key={product.sessionId} className="odd:bg-muted/50">
-                                <TableCell className="flex gap-2 max-w- overflow-scroll">{product.touchpoints.map(touchpoint=> <Badge >{touchpoint.channel}</Badge>)}</TableCell>
-                                <TableCell >{product.touchpoints.length}</TableCell>
+                                <TableCell className="min-w-0 py-3">
+                                    <DynamicBadgeDisplay maxVisible={7} touchpoints={product.touchpoints}/>
+                                </TableCell>
+                                <TableCell style={{ textAlign: 'right' }} className="py-3 text-lg ">
+                                    {product.touchpoints.length}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

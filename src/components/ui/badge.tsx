@@ -191,28 +191,22 @@ const badgeButtonVariants = cva(
     },
 );
 
-function Badge({
-                   className,
-                   variant,
-                   size,
-                   appearance,
-                   shape,
-                   asChild = false,
-                   disabled,
-                   ...props
-               }: BadgeProps) {
-    const Comp = asChild ? Slot : 'span';
-    return (
-        <Comp
-            data-slot="badge"
-            className={cn(
-                badgeVariants({variant, size, appearance, shape, disabled}),
-                className,
-            )}
-            {...props}
-        />
-    );
-}
+const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
+    ({className, variant, size, appearance, shape, asChild = false, disabled, ...props}, ref) => {
+        const Comp = asChild ? Slot : 'span';
+        return (
+            <Comp
+                ref={ref} // Pass the ref here
+                data-slot="badge"
+                className={cn(
+                    badgeVariants({variant, size, appearance, shape, disabled}),
+                    className,
+                )}
+                {...props}
+            />
+        );
+    }
+);
 
 function BadgeButton({
                          className,
