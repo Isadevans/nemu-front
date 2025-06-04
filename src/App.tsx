@@ -8,7 +8,7 @@ function App() {
     const {data, isLoading} = useQuery({
         queryKey: ['journeys', 1, 10],
         queryFn: async () => {
-            const response = await axios.get<JourneyResponse>('http://localhost:3000/journeys?page=1&limit=10');
+            const response = await axios.get<JourneyResponse>(`${import.meta.env.VITE_BACKEND_URL}/journeys?page=1&limit=10`);
             return response.data
         }
     })

@@ -1,16 +1,5 @@
 # Nemu Front
 
-This project is a frontend application built with React, TypeScript, and Vite. It fetches and displays journey data from an API.
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
-### Prerequisites
-
-*   Node.js (v18 or higher recommended)
-*   npm (comes with Node.js)
-
 ### Installation
 
 1.  Clone the repository:
