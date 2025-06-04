@@ -109,6 +109,7 @@ export default function DynamicBadgeDisplay({
         <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap w-full h-[2.125rem]">
             {displayElements.map((element, index) => (
                 <React.Fragment
+                    // @ts-expect-error element can be either Touchpoint or PlusBadgeElement
                     key={('type' in element && element.type === 'plus') ? `plus-badge-${index}` : `touchpoint-${element.id}-${index}-${element.channel}`}>
                     {('type' in element && element.type === 'plus') ? (
                         <TooltipProvider>
