@@ -135,13 +135,15 @@ export default function DynamicBadgeDisplay({
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
-                    ) : (
+                    ) : 'channel' in element ? (
                         <div
                             className={`${baseBadgeClasses} ${getBadgeColorForChannel(element.channel)}`}
                         >
-                            {element.channel ? element.channel : element.content}
+                            {element.channel}
                         </div>
-                    )}
+                    ) : null
+
+                    }
 
                     {index < displayElements.length - 1 && (
                         <ChevronRightIcon className="h-4 w-4 text-gray-400 shrink-0"/>
